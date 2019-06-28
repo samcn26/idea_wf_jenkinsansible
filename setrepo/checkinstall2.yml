@@ -1,0 +1,24 @@
+---
+-
+  hosts: ubuntudev
+  tasks:
+    # require ansible 2.5
+    # - name: output
+    #   debug:
+    #     msg: "{{ ansible_facts.packages }}"
+
+    # - name: "git test result"
+    #   debug: 
+    #     msg: "git found"
+    #   when: "'git' in ansible_facts.packages"
+    
+    # test ubuntu
+    - name: check installed package in ubuntu
+      shell: git --help
+      ignore_errors: True
+      register: gitinfo
+
+    - name: output gitinfo
+      debug:
+        msg: "{{ gitinfo }}"
+...

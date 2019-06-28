@@ -1,0 +1,21 @@
+---
+-
+  hosts: centos1
+  tasks:
+    - name: check git if installed
+      yum:
+        list: git
+      register: pkg
+    - name: output all
+      debug: 
+        msg: "{{ pkg }}"
+
+    - name: output
+      debug: 
+        msg: "{{ pkg.results | selectattr('yumstate', 'match', 'installed') | list }}"
+
+    - name: output install info
+      debug:
+        msg: "installed"
+      when: pkg.results | selectattr('yumstate', 'match', 'installed') | list | length !=0
+...

@@ -1,0 +1,67 @@
+---
+-
+  hosts: ubuntudev
+  tasks:
+    # require ansible 2.5
+    # - name: Gather package facts
+    #   package_facts:
+    #     manager: auto
+
+    # - name: Debug if package is present
+    #   debug:
+    #     msg: 'yes, mypackage is present'
+    #   when: '"mypackage" in ansible_facts.packages'
+
+    # - name: Debug if package is absent
+    #   debug:
+    #     msg: 'no, mypackage is absent'
+    #   when: '"mypackage" not in ansible_facts.packages'
+
+    # - name: output
+    #   debug:
+    #     msg: "{{ ansible_facts.packages }}"
+
+    # - name: "git test result"
+    #   debug: 
+    #     msg: "git found"
+    #   when: "'git' in ansible_facts.packages"
+
+    # - name: Gather package facts
+    #   package_facts:
+    #     manager: auto
+
+    # - name: Install debconf-utils if graphite-carbon is absent
+    #   apt:
+    #     name: debconf-utils
+    #     state: present
+    #   when: '"graphite-carbon" not in ansible_facts.packages'
+    
+    # test in ubuntu
+    - name: check installed package in ubuntu
+      shell: dpkg-query -W 'git'
+      ignore_errors: True
+      register: gitinfo
+
+    - name: check uninstalled package in ubuntu
+      shell: dpkg-query -W 'hadoop'
+      ignore_errors: True
+      register: hadoopinfo
+
+    - name: output gitinfo
+      debug:
+        msg: "{{ gitinfo }}"
+
+    - name: output hadoopinfo
+      debug:
+        msg: "{{ hadoopinfo }}"   
+
+    - name: output checked by gitinfo
+      debug:
+        msg: "need to install git"
+      when: gitinfo | failed
+
+    - name: output checked by hadoopinfo
+      debug:
+        msg: "need to install hadoop"
+      when: hadoopinfo | failed
+...
